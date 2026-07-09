@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hẹn gặp em ❤️</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",sans-serif}
+body{
+background:linear-gradient(135deg,#ffd6e8,#fff2f7);
+display:flex;justify-content:center;align-items:center;
+min-height:100vh;overflow:hidden;color:#444;
+}
+.card{
+width:min(92vw,560px);
+background:#fff;
+padding:36px;
+border-radius:22px;
+box-shadow:0 15px 40px rgba(0,0,0,.12);
+text-align:center;
+animation:fade .4s;
+}
+.hidden{display:none}
+h1{color:#e91e63;margin-bottom:28px}
+.buttons{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:36px;
+margin-top:10px;
+position:relative;
+height:70px;
+}
+button{
+border:none;border-radius:12px;padding:14px 26px;
+font-size:18px;cursor:pointer;
+box-shadow:0 8px 18px rgba(0,0,0,.15);
+transition:.25s;
+}
+#yes{background:#28a745;color:#fff}
+#yes:hover{transform:scale(1.08)}
+#no{
+background:#ff4d4f;
+color:#fff;
+position:relative;
+transition:left .6s linear,
+           top .6s linear;
+will-change:left, top;
+backface-visibility:hidden;
+transform:translateZ(0);
+}
+.options{display:grid;grid-template-columns:1fr;gap:14px}
+.option{
+padding:16px;border:2px solid #ffd2df;border-radius:14px;
+cursor:pointer;transition:.2s;font-size:18px;
+}
+.option:hover,.option.selected{
+background:#ffe6ef;border-color:#ff5b94;
+}
+#otherInput{
+margin-top:16px;width:100%;padding:12px;
+font-size:17px;border:1px solid #ccc;border-radius:10px;display:none;
+}
+.next{
+margin-top:24px;background:#ff5b94;color:#fff;
+}
+p{font-size:22px;line-height:1.7}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div id="page1" class="card">
+<h1>Tối nay anh có thể gặp em không?</h1>
+<div class="buttons">
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+</div>
+</div>
+
+<div id="page2" class="card hidden">
+<h1>🕘 Em muốn gặp lúc mấy giờ?</h1>
+<div class="options" id="timeOptions">
+<div class="option" data-value="9:30">9:30</div>
+<div class="option" data-value="9:45">9:45</div>
+<div class="option" data-value="10:00">10:00</div>
+<div class="option" data-value="Khác">⏰ Khác</div>
+</div>
+
+<input id="customTime" type="time" style="display:none;margin-top:16px;width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:10px;">
+
+<button class="next" id="timeNext">Tiếp tục</button>
+</div>
+
+<div id="page3" class="card hidden">
+<h1>🥤 Em muốn uống gì?</h1>
+<div class="options" id="drinkOptions">
+<div class="option" data-value="Trà sữa Tocotoco">🧋 Trà sữa Tocotoco</div>
+<div class="option" data-value="Nước ép hoa quả">🍹 Nước ép hoa quả</div>
+<div class="option" data-value="Hoa quả dầm">🍓 Hoa quả dầm</div>
+<div class="option" data-value="Khác">✍️ Khác</div>
+</div>
+<input id="otherInput" placeholder="Nhập đồ uống..." style="display:none;margin-top:16px;width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:10px;">
+<button class="next" id="drinkNext">Tiếp tục</button>
+</div>
+
+<div id="pageDrinkDetail" class="card hidden">
+<h1 id="detailTitle">Chọn</h1>
+<div class="options" id="detailOptions"></div>
+<input id="detailOther" placeholder="Nhập lựa chọn..." style="display:none;margin-top:16px;width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:10px;">
+<button class="next" id="detailNext">Hoàn thành</button>
+</div>
+
+<div id="page4" class="card hidden">
+<h1 id="finalTitle"></h1>
+<p>
+Cảm ơn em đã dành thời gian quan tâm.<br>
+Hẹn gặp em tối nay nhé ❤️
+</p>
+</div>
+
+<script>
+const no=document.getElementById("no");
+function moveNo(){
+ const p=20;
+ const x=Math.random()*(innerWidth-no.offsetWidth-p);
+ const y=Math.random()*(innerHeight-no.offsetHeight-p);
+ no.style.left=x+"px";
+ no.style.top=y+"px";
+}
+// Ban đầu Yes và No nằm đối xứng nhau.
+// Chỉ khi rê vào No mới chuyển sang fixed và chạy.
+let escaped = false;
+
+document.addEventListener("mousemove",(e)=>{
+    const rect=no.getBoundingClientRect();
+    const cx=rect.left+rect.width/2;
+    const cy=rect.top+rect.height/2;
+    const d=Math.hypot(e.clientX-cx,e.clientY-cy);
+
+    if(d<70){
+        if(!escaped){
+            if(!document.getElementById("no-placeholder")){
+                const ph=document.createElement("div");
+                ph.id="no-placeholder";
+                ph.style.width=rect.width+"px";
+                ph.style.height=rect.height+"px";
+                no.parentNode.insertBefore(ph,no);
+            }
+            no.style.position="fixed";
+            no.style.width=rect.width+"px";
+            no.style.left=rect.left+"px";
+            no.style.top=rect.top+"px";
+            escaped=true;
+        }
+        const now = Date.now();
+        if(!window.__lastNoMove || now-window.__lastNoMove>180){
+            window.__lastNoMove = now;
+            moveNo();
+        }
+    }
+});
+
+no.addEventListener("touchstart",e=>{
+    e.preventDefault();
+    if(!escaped){
+        const rect = no.getBoundingClientRect();
+        if(!document.getElementById("no-placeholder")){
+            const ph=document.createElement("div");
+            ph.id="no-placeholder";
+            ph.style.width=rect.width+"px";
+            ph.style.height=rect.height+"px";
+            no.parentNode.insertBefore(ph,no);
+        }
+        no.style.position="fixed";
+        no.style.width=rect.width+"px";
+        no.style.left=rect.left+"px";
+        no.style.top=rect.top+"px";
+        escaped = true;
+    }
+    moveNo();
+});
+
+const pages=["page1","page2","page3","pageDrinkDetail","page4"];
+function show(id){
+ pages.forEach(p=>document.getElementById(p).classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+}
+document.getElementById("yes").onclick=()=>show("page2");
+
+let selectedTime="",selectedDrink="";
+
+const customTime=document.getElementById("customTime");
+document.querySelectorAll("#timeOptions .option").forEach(o=>{
+ o.onclick=()=>{
+  document.querySelectorAll("#timeOptions .option").forEach(x=>x.classList.remove("selected"));
+  o.classList.add("selected");
+  selectedTime=o.dataset.value;
+  customTime.style.display=selectedTime==="Khác"?"block":"none";
+ };
+});
+document.getElementById("timeNext").onclick=()=>{
+ if(!selectedTime){alert("Hãy chọn thời gian.");return;}
+ if(selectedTime==="Khác"){
+   if(!customTime.value){alert("Hãy chọn thời gian.");return;}
+   selectedTime=customTime.value.replace(":",":");
+ }
+ show("page3");
+};
+
+
+const otherInput=document.getElementById("otherInput");
+const detailOther=document.getElementById("detailOther");
+const detailOptions=document.getElementById("detailOptions");
+const detailTitle=document.getElementById("detailTitle");
+
+document.querySelectorAll("#drinkOptions .option").forEach(o=>{
+ o.onclick=()=>{
+  document.querySelectorAll("#drinkOptions .option").forEach(x=>x.classList.remove("selected"));
+  o.classList.add("selected");
+  selectedDrink=o.dataset.value;
+  otherInput.style.display=selectedDrink==="Khác"?"block":"none";
+ };
+});
+
+document.getElementById("drinkNext").onclick=()=>{
+ if(!selectedDrink){alert("Hãy chọn đồ uống.");return;}
+ if(selectedDrink==="Khác"){
+   if(!otherInput.value.trim()){alert("Hãy nhập đồ uống.");return;}
+   selectedDrink=otherInput.value.trim();
+   document.getElementById("finalTitle").textContent="❤️ Hẹn gặp em vào lúc "+selectedTime;
+   show("page4");
+   return;
+ }
+ if(selectedDrink==="Hoa quả dầm"){
+   document.getElementById("finalTitle").textContent="❤️ Hẹn gặp em vào lúc "+selectedTime;
+   show("page4");
+   return;
+ }
+ let opts=[];
+ if(selectedDrink==="Nước ép hoa quả"){
+   detailTitle.textContent="🍹 Chọn loại nước ép";
+   opts=["Dưa hấu","Dứa","Ổi","Khác"];
+ }else{
+   detailTitle.textContent="🧋 Chọn vị trà sữa";
+   opts=["Trà sữa nếp cẩm","Trà sữa chân châu hoàng gia","Trà sữa dâu tây","Trà sữa phô mai tươi","Khác"];
+ }
+ detailOptions.innerHTML="";
+ detailOther.style.display="none";
+ opts.forEach(v=>{
+   const d=document.createElement("div");
+   d.className="option";
+   d.textContent=v;
+   d.onclick=()=>{
+      detailOptions.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));
+      d.classList.add("selected");
+      d.dataset.sel=v;
+      detailOptions.dataset.value=v;
+      detailOther.style.display=(v==="Khác")?"block":"none";
+   };
+   detailOptions.appendChild(d);
+ });
+ show("pageDrinkDetail");
+};
+
+document.getElementById("detailNext").onclick=()=>{
+ let v=detailOptions.dataset.value;
+ if(!v){alert("Hãy chọn một mục.");return;}
+ if(v==="Khác"){
+   if(!detailOther.value.trim()){alert("Hãy nhập lựa chọn.");return;}
+ }
+ document.getElementById("finalTitle").textContent="❤️ Hẹn gặp em vào lúc "+selectedTime;
+ show("page4");
+};
+
+</script>
+</body>
+</html>
