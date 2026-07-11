@@ -95,7 +95,7 @@ p{font-size:22px;line-height:1.7}
 
 <input id="customTime" type="time" style="display:none;margin-top:16px;width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:10px;">
 
-<button class="next" id="timeNext">Tiếp tục</button>
+<div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="next" id="timeBack" style="background:#999;">⬅ Quay lại</button><button class="next" id="timeNext">Tiếp tục</button></div>
 </div>
 
 <div id="page3" class="card hidden">
@@ -107,14 +107,24 @@ p{font-size:22px;line-height:1.7}
 <div class="option" data-value="Khác">✍️ Khác</div>
 </div>
 <input id="otherInput" placeholder="Nhập đồ uống..." style="display:none;margin-top:16px;width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:10px;">
-<button class="next" id="drinkNext">Tiếp tục</button>
+<div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="next" id="drinkBack" style="background:#999;">⬅ Quay lại</button><button class="next" id="drinkNext">Tiếp tục</button></div>
 </div>
 
 <div id="pageDrinkDetail" class="card hidden">
 <h1 id="detailTitle">Chọn</h1>
 <div class="options" id="detailOptions"></div>
 <input id="detailOther" placeholder="Nhập lựa chọn..." style="display:none;margin-top:16px;width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:10px;">
-<button class="next" id="detailNext">Hoàn thành</button>
+<div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="next" id="detailBack" style="background:#999;">⬅ Quay lại</button><button class="next" id="detailNext">Tiếp tục</button></div>
+</div>
+
+
+<div id="pageMessage" class="card hidden">
+<h1>💌 Em có gì muốn gửi gắm không?</h1>
+<textarea id="messageBox" placeholder="Có thể để trống..." style="width:100%;height:140px;padding:12px;font-size:16px;border-radius:10px;border:1px solid #ccc;resize:vertical;"></textarea>
+<div style="display:flex;justify-content:space-between;gap:12px;margin-top:20px;">
+<button class="next" id="msgBack" style="background:#999;">⬅ Quay lại</button>
+<button class="next" id="msgNext">Tiếp tục</button>
+</div>
 </div>
 
 <div id="page4" class="card hidden">
@@ -189,7 +199,7 @@ no.addEventListener("touchstart",e=>{
     moveNo();
 });
 
-const pages=["page1","pageIntro","page2","page3","pageDrinkDetail","page4"];
+const pages=["page1","pageIntro","page2","page3","pageDrinkDetail","pageMessage","page4"];
 function show(id){
  pages.forEach(p=>document.getElementById(p).classList.add("hidden"));
  document.getElementById(id).classList.remove("hidden");
@@ -203,12 +213,14 @@ document.getElementById("introNext").onclick=()=>show("page2");
 let selectedTime="",selectedDrink="";
 
 let selectedDetail = "";
+let messageText="";
 
 async function sendAnswer(){
   const payload={
     time:selectedTime,
     drink:selectedDrink,
-    detail:selectedDetail
+    detail:selectedDetail,
+    message:messageText
   };
   try{
     await fetch("https://script.google.com/macros/s/AKfycbwNjVmBuk54r7xyeWCLhlbNL4KB_8znDkRVas-zN-wtnqSKT81BBGVrOgCjuX5qUy6X/exec",{
@@ -264,14 +276,14 @@ document.getElementById("drinkNext").onclick=()=>{
    document.getElementById("finalTitle").textContent="❤️ Hẹn gặp em vào lúc "+selectedTime;
    sendAnswer();
     sendAnswer();
-   show("page4");
+   show("pageMessage");
    return;
  }
  if(selectedDrink==="Hoa quả dầm"){
    document.getElementById("finalTitle").textContent="❤️ Hẹn gặp em vào lúc "+selectedTime;
    sendAnswer();
     sendAnswer();
-   show("page4");
+   show("pageMessage");
    return;
  }
  let opts=[];
@@ -308,6 +320,21 @@ document.getElementById("detailNext").onclick=()=>{
    if(!detailOther.value.trim()){alert("Hãy nhập lựa chọn.");return;}
    selectedDetail=detailOther.value.trim();
  }
+ document.getElementById("finalTitle").textContent="❤️ Hẹn gặp em vào lúc "+selectedTime;
+ show("page4");
+};
+
+
+document.getElementById("timeBack").onclick=()=>{ if(noMoved) show("pageIntro"); else show("page1"); };
+document.getElementById("drinkBack").onclick=()=>show("page2");
+document.getElementById("detailBack").onclick=()=>show("page3");
+document.getElementById("msgBack").onclick=()=>{
+ if(document.getElementById("pageDrinkDetail").classList.contains("hidden")) show("page3");
+ else show("pageDrinkDetail");
+};
+document.getElementById("msgNext").onclick=()=>{
+ messageText=document.getElementById("messageBox").value.trim();
+ sendAnswer();
  document.getElementById("finalTitle").textContent="❤️ Hẹn gặp em vào lúc "+selectedTime;
  show("page4");
 };
