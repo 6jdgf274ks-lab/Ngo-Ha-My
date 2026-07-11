@@ -80,7 +80,7 @@ p{font-size:22px;line-height:1.7}
 
 
 <div id="pageIntro" class="card hidden">
-<h1 style="margin-bottom:24px;">🤨 Định từ chối tôi đấy à?</h1>
+<h1 style="margin-bottom:24px;">😁 Định từ chối tôi à?</h1>
 <button class="next" id="introNext" style="font-weight:700;">Em đùa thôi 😭</button>
 </div>
 
@@ -99,14 +99,14 @@ p{font-size:22px;line-height:1.7}
 </div>
 
 <div id="page3" class="card hidden">
-<h1>🥤Và tất nhiên rồi, không biết là hôm nay em muốn dùng gì?</h1>
+<h1>🥤 Và tất nhiên rồi, không biết là hôm nay em muốn dùng gì?</h1>
 <div class="options" id="drinkOptions">
 <div class="option" data-value="Trà sữa Tocotoco">🧋 Trà sữa Tocotoco</div>
 <div class="option" data-value="Nước ép hoa quả">🍹 Nước ép hoa quả</div>
 <div class="option" data-value="Hoa quả dầm">🍓 Hoa quả dầm</div>
 <div class="option" data-value="Khác">✍️ Khác</div>
 </div>
-<input id="otherInput" placeholder="Không biết bạn ấy muốn uống gì đây ta 🤔" style="display:none;margin-top:16px;width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:10px;">
+<input id="otherInput" placeholder="Không biết hôm nay bạn ấy muốn dùng gì đây ta 🤔" style="display:none;margin-top:16px;width:100%;padding:12px;font-size:17px;border:1px solid #ccc;border-radius:10px;">
 <div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="next" id="drinkBack" style="background:#999;">⬅ Quay lại</button><button class="next" id="drinkNext">Tiếp tục</button></div>
 </div>
 
@@ -119,7 +119,7 @@ p{font-size:22px;line-height:1.7}
 
 
 <div id="pageMessage" class="card hidden">
-<h1>💌 Em còn gì muốn gửi gắm nữa không?</h1>
+<h1>💌 Em có gì muốn gửi gắm không?</h1>
 <textarea id="messageBox" placeholder="Có thể để trống..." style="width:100%;height:140px;padding:12px;font-size:16px;border-radius:10px;border:1px solid #ccc;resize:vertical;"></textarea>
 <div style="display:flex;justify-content:space-between;gap:12px;margin-top:20px;">
 <button class="next" id="msgBack" style="background:#999;">⬅ Quay lại</button>
@@ -130,7 +130,7 @@ p{font-size:22px;line-height:1.7}
 <div id="page4" class="card hidden">
 <h1 id="finalTitle"></h1>
 <p>
-Cảm ơn em đã dành thời gian quan tâm đến thằng già này.<br>
+Cảm ơn em đã dành thời gian quan tâm.<br>
 Hẹn gặp em tối nay nhé ❤️
 </p>
 </div>
@@ -288,10 +288,10 @@ document.getElementById("drinkNext").onclick=()=>{
  }
  let opts=[];
  if(selectedDrink==="Nước ép hoa quả"){
-   detailTitle.textContent="🍹 Chọn loại nước ép";
+   detailTitle.textContent="Wait a minute🫸";
    opts=["Dưa hấu","Dứa","Ổi","Khác"];
  }else{
-   detailTitle.textContent="🧋 Chọn vị trà sữa";
+   detailTitle.textContent="Wait a minute🫸";
    opts=["Trà sữa nếp cẩm","Trà sữa chân châu hoàng gia","Trà sữa dâu tây","Trà sữa phô mai tươi","Khác"];
  }
  detailOptions.innerHTML="";
