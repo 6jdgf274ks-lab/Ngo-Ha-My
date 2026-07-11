@@ -78,6 +78,12 @@ p{font-size:22px;line-height:1.7}
 </div>
 </div>
 
+
+<div id="pageIntro" class="card hidden">
+<h1 style="margin-bottom:24px;">😁 Định từ chối tôi à?</h1>
+<button class="next" id="introNext" style="font-weight:700;">Em đùa thôi 😭</button>
+</div>
+
 <div id="page2" class="card hidden">
 <h1>🕘 Em muốn gặp lúc mấy giờ?</h1>
 <div class="options" id="timeOptions">
@@ -131,6 +137,7 @@ function moveNo(){
 // Ban đầu Yes và No nằm đối xứng nhau.
 // Chỉ khi rê vào No mới chuyển sang fixed và chạy.
 let escaped = false;
+let noMoved = false;
 
 document.addEventListener("mousemove",(e)=>{
     const rect=no.getBoundingClientRect();
@@ -156,7 +163,8 @@ document.addEventListener("mousemove",(e)=>{
         const now = Date.now();
         if(!window.__lastNoMove || now-window.__lastNoMove>180){
             window.__lastNoMove = now;
-            moveNo();
+            noMoved = true;
+    moveNo();
         }
     }
 });
@@ -181,12 +189,16 @@ no.addEventListener("touchstart",e=>{
     moveNo();
 });
 
-const pages=["page1","page2","page3","pageDrinkDetail","page4"];
+const pages=["page1","pageIntro","page2","page3","pageDrinkDetail","page4"];
 function show(id){
  pages.forEach(p=>document.getElementById(p).classList.add("hidden"));
  document.getElementById(id).classList.remove("hidden");
 }
-document.getElementById("yes").onclick=()=>show("page2");
+document.getElementById("yes").onclick=()=>{
+ if(noMoved){show("pageIntro");}
+ else{show("page2");}
+};
+document.getElementById("introNext").onclick=()=>show("page2");
 
 let selectedTime="",selectedDrink="";
 
@@ -303,4 +315,3 @@ document.getElementById("detailNext").onclick=()=>{
 </script>
 </body>
 </html>
-<!-- Update 2026-07-11 -->
